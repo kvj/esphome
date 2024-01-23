@@ -477,6 +477,20 @@ void Nextion::process_nextion_commands_() {
         break;
       }
       case 0x67: {  // Touch Coordinate (awake)
+        if (to_process_length != 5) {
+          ESP_LOGW(TAG, "Touch coordinate data is expecting 5, received %zu", to_process_length);
+          ESP_LOGW(TAG, "%s", to_process.c_str());
+          break;
+        }
+
+        uint16_t x = (uint16_t(to_process[0]) << 8) | to_process[1];
+        uint16_t y = (uint16_t(to_process[2]) << 8) | to_process[3];
+        uint8_t touch_event = to_process[4];  // 0 -> release, 1 -> press
+        ESP_LOGD(TAG, "Got awake touch event:");
+        ESP_LOGD(TAG, "  x:    %u", x);
+        ESP_LOGD(TAG, "  y:    %u", y);
+        ESP_LOGD(TAG, "  type: %s", touch_event ? "PRESS" : "RELEASE");
+        this->raw_touch_callback_.call(x, y, touch_event != 0);
         break;
       }
       case 0x68: {  // touch coordinate data (sleep)
@@ -494,6 +508,7 @@ void Nextion::process_nextion_commands_() {
         ESP_LOGD(TAG, "  x:    %u", x);
         ESP_LOGD(TAG, "  y:    %u", y);
         ESP_LOGD(TAG, "  type: %s", touch_event ? "PRESS" : "RELEASE");
+        this->raw_touch_callback_.call(x, y, touch_event != 0);
         break;
       }
 

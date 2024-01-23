@@ -1118,6 +1118,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
    * @param callback The void() callback.
    */
   void add_touch_event_callback(std::function<void(uint8_t, uint8_t, bool)> &&callback);
+  void add_raw_touch_event_callback(std::function<void(uint16_t, uint16_t, bool)> &&callback) { this->raw_touch_callback_.add(std::move(callback)); }
 
   void update_all_components();
 
@@ -1307,6 +1308,7 @@ class Nextion : public NextionBase, public PollingComponent, public uart::UARTDe
   CallbackManager<void()> wake_callback_{};
   CallbackManager<void(uint8_t)> page_callback_{};
   CallbackManager<void(uint8_t, uint8_t, bool)> touch_callback_{};
+  CallbackManager<void(uint16_t, uint16_t, bool)> raw_touch_callback_{};
 
   optional<nextion_writer_t> writer_;
   float brightness_{1.0};
