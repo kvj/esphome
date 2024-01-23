@@ -60,7 +60,18 @@ class ESPColorView : public ESPColorSettable {
   void set_white(uint8_t white) override {
     if (this->white_ == nullptr)
       return;
+#ifdef GOVEE_LED_WHITE
+#ifdef GOVEE_LED_INVERT_WHITE
+    uint8_t value = 0xff - this->color_correction_->color_correct_white(white);
+#else
+    uint8_t value = this->color_correction_->color_correct_white(white);
+#endif
+    *this->white_ = value;
+    *(this->white_ + 1) = value;
+    *(this->white_ + 2) = value;
+#else
     *this->white_ = this->color_correction_->color_correct_white(white);
+#endif
   }
   void set_effect_data(uint8_t effect_data) override {
     if (this->effect_data_ == nullptr)
@@ -81,12 +92,20 @@ class ESPColorView : public ESPColorSettable {
   uint8_t get_white() const {
     if (this->white_ == nullptr)
       return 0;
+#ifdef GOVEE_LED_INVERT_WHITE
+    return this->color_correction_->color_uncorrect_white(0xff - *this->white_);
+#else
     return this->color_correction_->color_uncorrect_white(*this->white_);
+#endif
   }
   uint8_t get_white_raw() const {
     if (this->white_ == nullptr)
       return 0;
+#ifdef GOVEE_LED_INVERT_WHITE
+    return 0xff - *this->white_;
+#else
     return *this->white_;
+#endif
   }
   uint8_t get_effect_data() const {
     if (this->effect_data_ == nullptr)
