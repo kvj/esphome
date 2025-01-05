@@ -7,7 +7,8 @@ namespace sdl {
 
 void Sdl::setup() {
   SDL_Init(SDL_INIT_VIDEO);
-  this->window_ = SDL_CreateWindow(App.get_name().c_str(), this->pos_x_, this->pos_y_, this->width_, this->height_,
+  std::string title = this->title_ != ""? this->title_: App.get_name();
+  this->window_ = SDL_CreateWindow(title.c_str(), this->pos_x_, this->pos_y_, this->width_, this->height_,
                                    this->window_options_);
   this->renderer_ = SDL_CreateRenderer(this->window_, -1, SDL_RENDERER_SOFTWARE);
   SDL_RenderSetLogicalSize(this->renderer_, this->width_, this->height_);

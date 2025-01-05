@@ -33,6 +33,7 @@ class Sdl : public display::Display {
     this->pos_x_ = pos_x;
     this->pos_y_ = pos_y;
   }
+  void set_title(std::string title) { this->title_ = title; }
   int get_width() override { return this->width_; }
   int get_height() override { return this->height_; }
   float get_setup_priority() const override { return setup_priority::HARDWARE; }
@@ -65,6 +66,7 @@ class Sdl : public display::Display {
   uint16_t x_high_{0};
   uint16_t y_high_{0};
   std::map<int32_t, CallbackManager<void(bool)>> key_callbacks_{};
+  std::string title_{};
 };
 }  // namespace sdl
 }  // namespace esphome

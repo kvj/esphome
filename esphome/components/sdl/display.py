@@ -30,6 +30,7 @@ WINDOW_OPTIONS = (
     "skip_taskbar",
     "resizable",
 )
+CONF_TITLE = "title"
 
 
 def get_sdl_options(value):
@@ -53,6 +54,7 @@ CONFIG_SCHEMA = cv.All(
             {
                 cv.GenerateID(): cv.declare_id(Sdl),
                 cv.Optional(CONF_SDL_OPTIONS, default=""): get_sdl_options,
+                cv.Optional(CONF_TITLE, default=""): cv.string,
                 cv.Required(CONF_DIMENSIONS): cv.Any(
                     cv.dimensions,
                     cv.Schema(
@@ -112,3 +114,4 @@ async def to_code(config):
             lamb, [(display.DisplayRef, "it")], return_type=cg.void
         )
         cg.add(var.set_writer(lambda_))
+    cg.add(var.set_title(config[CONF_TITLE]))
