@@ -13,7 +13,7 @@ void Sdl::setup() {
   if (this->resizable_) flags |= SDL_WINDOW_RESIZABLE;
   this->window_ = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                    this->width_, this->height_, flags);
-  if (this->on_top_) SDL_SetWindowAlwaysOnTop(this->window_, true);
+  if (this->on_top_) SDL_SetWindowAlwaysOnTop(this->window_, SDL_TRUE);
   this->renderer_ = SDL_CreateRenderer(this->window_, -1, SDL_RENDERER_SOFTWARE);
   SDL_RenderSetLogicalSize(this->renderer_, this->width_, this->height_);
   this->texture_ =
