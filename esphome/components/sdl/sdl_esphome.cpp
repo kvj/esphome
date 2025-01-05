@@ -8,8 +8,12 @@ namespace sdl {
 void Sdl::setup() {
   ESP_LOGD(TAG, "Starting setup");
   SDL_Init(SDL_INIT_VIDEO);
-  this->window_ = SDL_CreateWindow(App.get_name().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                   this->width_, this->height_, SDL_WINDOW_RESIZABLE);
+  std::string title = this->title_ != ""? this->title_: App.get_name();
+  uint32_t flags = 0;
+  if (this->resizable_) flags |= SDL_WINDOW_RESIZABLE;
+  this->window_ = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                   this->width_, this->height_, flags);
+  if (this->on_top_) SDL_SetWindowAlwaysOnTop(this->window_, true);
   this->renderer_ = SDL_CreateRenderer(this->window_, -1, SDL_RENDERER_SOFTWARE);
   SDL_RenderSetLogicalSize(this->renderer_, this->width_, this->height_);
   this->texture_ =

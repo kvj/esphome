@@ -26,6 +26,9 @@ class Sdl : public display::Display {
     this->width_ = width;
     this->height_ = height;
   }
+  void set_resizable(bool resizable) { this->resizable_ = resizable; }
+  void set_on_top(bool on_top) { this->on_top_ = on_top; }
+  void set_title(std::string title) { this->title_ = title; }
   int get_width() override { return this->width_; }
   int get_height() override { return this->height_; }
   float get_setup_priority() const override { return setup_priority::HARDWARE; }
@@ -48,6 +51,9 @@ class Sdl : public display::Display {
   uint16_t y_low_{0};
   uint16_t x_high_{0};
   uint16_t y_high_{0};
+  bool resizable_{};
+  bool on_top_{};
+  std::string title_{};
 };
 }  // namespace sdl
 }  // namespace esphome

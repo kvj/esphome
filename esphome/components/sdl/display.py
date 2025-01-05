@@ -18,6 +18,9 @@ Sdl = sdl_ns.class_("Sdl", display.Display, cg.Component)
 
 CONF_SDL_OPTIONS = "sdl_options"
 CONF_SDL_ID = "sdl_id"
+CONF_TITLE = "title"
+CONF_RESIZABLE = "resizable"
+CONF_ON_TOP = "on_top"
 
 
 def get_sdl_options(value):
@@ -35,6 +38,9 @@ CONFIG_SCHEMA = cv.All(
             {
                 cv.GenerateID(): cv.declare_id(Sdl),
                 cv.Optional(CONF_SDL_OPTIONS, default=""): get_sdl_options,
+                cv.Optional(CONF_TITLE): cv.string,
+                cv.Optional(CONF_RESIZABLE, default=True): cv.boolean,
+                cv.Optional(CONF_ON_TOP, default=False): cv.boolean,
                 cv.Required(CONF_DIMENSIONS): cv.Any(
                     cv.dimensions,
                     cv.Schema(
@@ -70,3 +76,6 @@ async def to_code(config):
             lamb, [(display.DisplayRef, "it")], return_type=cg.void
         )
         cg.add(var.set_writer(lambda_))
+    cg.add(var.set_title(config[CONF_TITLE]))
+    cg.add(var.set_resizable(config[CONF_RESIZABLE]))
+    cg.add(var.set_on_top(config[CONF_ON_TOP]))
