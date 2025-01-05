@@ -38,7 +38,7 @@ CONFIG_SCHEMA = cv.All(
             {
                 cv.GenerateID(): cv.declare_id(Sdl),
                 cv.Optional(CONF_SDL_OPTIONS, default=""): get_sdl_options,
-                cv.Optional(CONF_TITLE): cv.string,
+                cv.Optional(CONF_TITLE, default=""): cv.string,
                 cv.Optional(CONF_RESIZABLE, default=True): cv.boolean,
                 cv.Optional(CONF_ON_TOP, default=False): cv.boolean,
                 cv.Required(CONF_DIMENSIONS): cv.Any(
