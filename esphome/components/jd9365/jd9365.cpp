@@ -51,14 +51,20 @@ void JD9365::setup() {
     ESP_ERROR_CHECK(esp_lcd_new_panel_jd9365(this->io_, &panel_config, &this->handle_));
     ESP_ERROR_CHECK(esp_lcd_panel_reset(this->handle_));
     ESP_ERROR_CHECK(esp_lcd_panel_init(this->handle_));
-    // ESP_ERROR_CHECK(esp_lcd_panel_swap_xy(this->handle_, true));
-    // ESP_ERROR_CHECK(esp_lcd_panel_mirror(this->handle_, true, true));
     this->cbs_ = {
         .on_color_trans_done = notify_refresh_finish_,
     };
 
     this->refresh_finish_ = xSemaphoreCreateBinary();
     esp_lcd_dpi_panel_register_event_callbacks(this->handle_, &this->cbs_, this);
+    if (this->backlight_ != 0) {
+        ESP_LOGD(TAG, "backlight_: %d", this->backlight_->state);
+        ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(this->handle_, this->backlight_->state));
+        this->backlight_->add_on_state_callback([this](bool is_on) {
+            ESP_LOGD(TAG, "backlight_->add_on_state_callback: %d", is_on);
+            esp_lcd_panel_disp_on_off(this->handle_, is_on);
+        });
+    }
 }
 
 void JD9365::loop() {

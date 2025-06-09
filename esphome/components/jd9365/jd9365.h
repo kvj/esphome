@@ -7,6 +7,7 @@
 #include "esphome/core/helpers.h"
 #include "esphome/core/hal.h"
 #include "esphome/components/display/display.h"
+#include "esphome/components/switch/switch.h"
 
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_panel_rgb.h"
@@ -37,10 +38,12 @@ class JD9365 : public display::Display {
         int get_height() override;
 
         void set_reset_pin(InternalGPIOPin *pin) { this->reset_pin_ = pin; }
+        void set_backlight_switch(esphome::switch_::Switch* backlight) { this->backlight_ = backlight; }
 
         bool notify_refresh_finish();
     protected:
         InternalGPIOPin *reset_pin_{};
+        esphome::switch_::Switch* backlight_ = 0;
 
         esp_lcd_panel_handle_t handle_{};
         esp_lcd_panel_io_handle_t io_{};
