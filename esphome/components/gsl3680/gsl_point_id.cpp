@@ -16,7 +16,6 @@
  */
 // #include "bsp/lcd_gsl3680.h"
 #include "gsl_point_id.h"
-#include "esp_log.h"
 #include "stdio.h"
 
 #define GSL_VERSION                                                            \
@@ -2744,7 +2743,6 @@ static int DataCheck(void)
 
 void gsl_DataInit(unsigned int *conf_in)
 {
-	ESP_LOGI(TAG,"gsl_DataInit");
 	int i, j;
 	unsigned int *conf;
 	int len;

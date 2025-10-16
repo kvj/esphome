@@ -6,10 +6,14 @@
 #include "esphome/components/i2c/i2c.h"
 #include "esphome/components/touchscreen/touchscreen.h"
 #include "esphome/core/hal.h"
-#include "esp_lcd_gsl3680.h"
+
+#include "gsl3680_firmware.h"
+#include "gsl_point_id.h"
 
 namespace esphome {
 namespace gsl3680 {
+
+#define TOUCH_MAX_POINTS 5
 
 constexpr static const char *const TAG = "touchscreen.gsl3680";
 
@@ -24,10 +28,18 @@ class GSL3680 : public touchscreen::Touchscreen, public i2c::I2CDevice {
     protected:
         InternalGPIOPin *interrupt_pin_{};
         InternalGPIOPin *reset_pin_{};
-        size_t width_ = 1280;
-        size_t height_ = 800;
-        esp_lcd_touch_handle_t tp_{};
-        esp_lcd_panel_io_handle_t tp_io_handle_{};
+        // size_t width_ = 1280;
+        // size_t height_ = 800;
+        // esp_lcd_touch_handle_t tp_{};
+        // esp_lcd_panel_io_handle_t tp_io_handle_{};
+
+        esphome::i2c::ErrorCode reset();
+        esphome::i2c::ErrorCode init();
+        esphome::i2c::ErrorCode read_configuration();
+        esphome::i2c::ErrorCode clear_registers();
+        esphome::i2c::ErrorCode load_firmware();
+        esphome::i2c::ErrorCode start();
+        esphome::i2c::ErrorCode read_ram();
 };
 
 }
