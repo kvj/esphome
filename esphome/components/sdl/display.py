@@ -31,6 +31,7 @@ WINDOW_OPTIONS = (
     "resizable",
 )
 CONF_TITLE = "title"
+CONF_ALLOW_SCREENSAVER = "allow_screensaver"
 
 
 def get_sdl_options(value):
@@ -55,6 +56,7 @@ CONFIG_SCHEMA = cv.All(
                 cv.GenerateID(): cv.declare_id(Sdl),
                 cv.Optional(CONF_SDL_OPTIONS, default=""): get_sdl_options,
                 cv.Optional(CONF_TITLE, default=""): cv.string,
+                cv.Optional(CONF_ALLOW_SCREENSAVER, default=True): cv.boolean,
                 cv.Required(CONF_DIMENSIONS): cv.Any(
                     cv.dimensions,
                     cv.Schema(
@@ -115,3 +117,4 @@ async def to_code(config):
         )
         cg.add(var.set_writer(lambda_))
     cg.add(var.set_title(config[CONF_TITLE]))
+    cg.add(var.set_allow_screensaver(config[CONF_ALLOW_SCREENSAVER]))

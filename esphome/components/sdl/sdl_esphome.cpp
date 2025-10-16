@@ -6,6 +6,9 @@ namespace esphome {
 namespace sdl {
 
 void Sdl::setup() {
+  if (this->allow_screensaver_) {
+    SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, "1");
+  }
   SDL_Init(SDL_INIT_VIDEO);
   std::string title = this->title_ != ""? this->title_: App.get_name();
   this->window_ = SDL_CreateWindow(title.c_str(), this->pos_x_, this->pos_y_, this->width_, this->height_,
